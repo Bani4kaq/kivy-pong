@@ -40,9 +40,6 @@ class PongGame(Widget):
     def update(self, dt):
         self.ball.move()
 
-        # -----------------------------------
-        # AI PADDLE (Player2) — Smooth, no jitter
-        # -----------------------------------
         target_y = self.ball.center_y
         current_y = self.player2.center_y
 
@@ -53,22 +50,18 @@ class PongGame(Widget):
             self.player2.center_y = current_y + \
                 (target_y - current_y) * lerp_factor
 
-        # Keep AI paddle inside the screen
         self.player2.center_y = max(
             self.player2.height / 2,
             min(self.height - self.player2.height / 2,
                 self.player2.center_y)
         )
 
-        # Bounce off paddles
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
 
-        # Bounce ball off bottom or top
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
 
-        # Scoring
         if self.ball.x < self.x:
             self.player2.score += 1
             self.serve_ball(vel=(4, 0))
@@ -78,7 +71,6 @@ class PongGame(Widget):
             self.serve_ball(vel=(-4, 0))
 
     def on_touch_move(self, touch):
-        # Human controls only Player1
         if touch.x < self.width / 3:
             self.player1.center_y = touch.y
 
@@ -93,3 +85,4 @@ class PongApp(App):
 
 if __name__ == '__main__':
     PongApp().run()
+
